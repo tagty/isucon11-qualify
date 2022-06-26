@@ -16,3 +16,4 @@
 .viminfo
 local/
 /go/
+.vscode
