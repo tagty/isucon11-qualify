@@ -75,9 +75,9 @@ alp:
 
 # deploy
 deploy:
-	ssh isucon11-qualify-1 "cd /home/isucon & \
-		git checkout . & \
-		git fetch & \
-		git checkout $(BRANCH) & \
-		git reset --hard origin/$(BRANCH) & \
+	ssh isucon11-qualify-1 "cd /home/isucon && \
+		git checkout . && \
+		git fetch && \
+		git checkout $(BRANCH) && \
+		git reset --hard origin/$(BRANCH) && \
 		cd /home/isucon"
