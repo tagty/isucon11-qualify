@@ -15,4 +15,4 @@
 .ssh/
 .viminfo
 local/
-go/
+/go/
