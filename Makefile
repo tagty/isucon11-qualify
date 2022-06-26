@@ -12,7 +12,7 @@ build:
 pprof:
 	go tool pprof -http=0.0.0.0:8080 /home/isucon/webapp/go/isucondition http://localhost:6060/debug/pprof/profile
 
-# mysql関連
+# mysql
 MYSQL_HOST="192.168.0.12"
 MYSQL_PORT=3306
 MYSQL_USER=isucon
@@ -42,18 +42,18 @@ slow-show:
 	sudo mysqldumpslow -s t $(SLOW_LOG) | head -n 20
 
 # nginx
-scp-nginx:
-	ssh isucon11-qualify-1 "sudo dd of=/etc/nginx/nginx.conf" < ./etc/nginx/nginx.conf
-	ssh isucon11-qualify-1 "sudo dd of=/etc/nginx/sites-available/isucondition.conf" < ./etc/nginx/sites-available/isucondition.conf
+# scp-nginx:
+# 	ssh isucon11-qualify-1 "sudo dd of=/etc/nginx/nginx.conf" < ./etc/nginx/nginx.conf
+# 	ssh isucon11-qualify-1 "sudo dd of=/etc/nginx/sites-available/isucondition.conf" < ./etc/nginx/sites-available/isucondition.conf
 
-reload-nginx:
+nginx-reload:
 	ssh isucon11-qualify-1 "sudo systemctl reload nginx.service"
 
-rotate-nginx:
+nginx-rotate:
 	ssh isucon11-qualify-1 sudo sh -c 'test -f /var/log/nginx/access.log && mv -f /var/log/nginx/access.log /var/log/nginx/access.log.old || true'
 	ssh isucon11-qualify-1 'sudo kill -USR1 `cat /var/run/nginx.pid`'
 
-deploy-nginx: scp-nginx reload-nginx
+# deploy-nginx: scp-nginx nginx-reload
 
 # alp
 ALPSORT=sum
@@ -65,10 +65,19 @@ OUTFORMAT=count,method,uri,min,max,sum,avg,p99
 alp:
 	ssh isucon11-qualify-1 "sudo alp ltsv --file=/var/log/nginx/access.log --nosave-pos --pos /tmp/alp.pos --sort $(ALPSORT) --reverse -o $(OUTFORMAT) -m $(ALPM) -q"
 
-.PHONY: alpsave
-alpsave:
-	sudo alp ltsv --file=/var/log/nginx/access.log --pos /tmp/alp.pos --dump /tmp/alp.dump --sort $(ALPSORT) --reverse -o $(OUTFORMAT) -m $(ALPM) -q
+# .PHONY: alpsave
+# alpsave:
+# 	sudo alp ltsv --file=/var/log/nginx/access.log --pos /tmp/alp.pos --dump /tmp/alp.dump --sort $(ALPSORT) --reverse -o $(OUTFORMAT) -m $(ALPM) -q
 
-.PHONY: alpload
-alpload:
-	sudo alp ltsv --load /tmp/alp.dump --sort $(ALPSORT) --reverse -o count,method,uri,min,max,sum,avg,p99 -q
+# .PHONY: alpload
+# alpload:
+# 	sudo alp ltsv --load /tmp/alp.dump --sort $(ALPSORT) --reverse -o count,method,uri,min,max,sum,avg,p99 -q
+
+# deploy
+deploy:
+	ssh isucon11-qualify-1 "cd /home/isucon & \
+		git checkout . & \
+		git fetch & \
+		git checkout $(BRANCH) & \
+		git reset --hard origin/$(BRANCH) & \
+		cd /home/isucon"
