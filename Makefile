@@ -33,9 +33,14 @@ build:
 
 # pprofのデータをwebビューで見る
 # サーバー上で sudo apt install graphvizが必要
-.PHONY: pprof
+# .PHONY: pprof
+# pprof:
+# 	go tool pprof -http=0.0.0.0:8080 /home/isucon/webapp/go/isucondition http://localhost:6060/debug/pprof/profile
+
 pprof:
-	go tool pprof -http=0.0.0.0:8080 /home/isucon/webapp/go/isucondition http://localhost:6060/debug/pprof/profile
+	ssh isucon11-qualify-1 " \
+	/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go http://localhost:6060/debug/pprof/profile; \
+	wait"
 
 # mysql
 MYSQL_HOST="192.168.0.12"
