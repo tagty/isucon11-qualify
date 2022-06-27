@@ -24,15 +24,15 @@ SLOW_LOG=/tmp/slow-query.log
 
 # slow-query-logを取る設定にする
 # DBを再起動すると設定はリセットされる
-.PHONY: slow-on
-slow-on:
-	-sudo rm $(SLOW_LOG)
-	sudo systemctl restart mysql
-	$(MYSQL) -e "set global slow_query_log_file = '$(SLOW_LOG)'; set global long_query_time = 0.001; set global slow_query_log = ON;"
+# .PHONY: slow-on
+# slow-on:
+# 	-sudo rm $(SLOW_LOG)
+# 	sudo systemctl restart mysql
+# 	$(MYSQL) -e "set global slow_query_log_file = '$(SLOW_LOG)'; set global long_query_time = 0.001; set global slow_query_log = ON;"
 
-.PHONY: slow-off
-slow-off:
-	$(MYSQL) -e "set global slow_query_log = OFF;"
+# .PHONY: slow-off
+# slow-off:
+# 	$(MYSQL) -e "set global slow_query_log = OFF;"
 
 # mysqldumpslowを使ってslow query logを出力
 # オプションは合計時間ソート
@@ -40,6 +40,9 @@ slow-off:
 .PHONY: slow-show
 slow-show:
 	sudo mysqldumpslow -s t $(SLOW_LOG) | head -n 20
+
+mariadb-restart:
+	ssh isucon11-qualify-1 "sudo systemctl status mariadb"
 
 # nginx
 # scp-nginx:
