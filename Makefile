@@ -1,10 +1,35 @@
+# deploy
+# deploy:
+# 	ssh isucon11-qualify-1 "cd /home/isucon && \
+# 		git checkout . && \
+# 		git fetch && \
+# 		git checkout $(BRANCH) && \
+# 		git reset --hard origin/$(BRANCH) && \
+# 		wait"
+
+deploy:
+	ssh isucon11-qualify-1 " \
+	cd /home/isucon; \
+	git checkout .; \
+	git fetch; \
+	git checkout $(BRANCH); \
+	git reset --hard origin/$(BRANCH); \
+	wait"
+
 # ビルドして、サービスのリスタートを行う
 # リスタートを行わないと反映されないので注意
-.PHONY: build
+# .PHONY: build
+# build:
+# 	cd /home/isucon/webapp/go; \
+# 	go build -o isucondition main.go; \
+# 	sudo systemctl restart isucondition.go.service;
+
 build:
+	ssh isucon11-qualify-1 " \
 	cd /home/isucon/webapp/go; \
-	go build -o isucondition main.go; \
-	sudo systemctl restart isucondition.go.service;
+	/home/isucon/local/go/bin/go build -o isucondition main.go; \
+	sudo systemctl restart isucondition.go; \
+	wait"
 
 # pprofのデータをwebビューで見る
 # サーバー上で sudo apt install graphvizが必要
@@ -75,12 +100,3 @@ alp:
 # .PHONY: alpload
 # alpload:
 # 	sudo alp ltsv --load /tmp/alp.dump --sort $(ALPSORT) --reverse -o count,method,uri,min,max,sum,avg,p99 -q
-
-# deploy
-deploy:
-	ssh isucon11-qualify-1 "cd /home/isucon && \
-		git checkout . && \
-		git fetch && \
-		git checkout $(BRANCH) && \
-		git reset --hard origin/$(BRANCH) && \
-		cd /home/isucon"
