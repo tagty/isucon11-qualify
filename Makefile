@@ -9,12 +9,12 @@
 
 deploy:
 	ssh isucon11-qualify-1 " \
-	cd /home/isucon; \
-	git checkout .; \
-	git fetch; \
-	git checkout $(BRANCH); \
-	git reset --hard origin/$(BRANCH); \
-	wait"
+		cd /home/isucon; \
+		git checkout .; \
+		git fetch; \
+		git checkout $(BRANCH); \
+		git reset --hard origin/$(BRANCH); \
+		wait"
 
 # ビルドして、サービスのリスタートを行う
 # リスタートを行わないと反映されないので注意
@@ -26,10 +26,10 @@ deploy:
 
 build:
 	ssh isucon11-qualify-1 " \
-	cd /home/isucon/webapp/go; \
-	/home/isucon/local/go/bin/go build -o isucondition main.go; \
-	sudo systemctl restart isucondition.go; \
-	wait"
+		cd /home/isucon/webapp/go; \
+		/home/isucon/local/go/bin/go build -o isucondition main.go; \
+		sudo systemctl restart isucondition.go; \
+		wait"
 
 # pprofのデータをwebビューで見る
 # サーバー上で sudo apt install graphvizが必要
@@ -39,8 +39,8 @@ build:
 
 pprof:
 	ssh isucon11-qualify-1 " \
-	/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go http://localhost:6060/debug/pprof/profile; \
-	wait"
+		/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go http://localhost:6060/debug/pprof/profile; \
+		wait"
 
 # mysql
 MYSQL_HOST="192.168.0.12"
@@ -72,7 +72,9 @@ slow-show:
 	sudo mysqldumpslow -s t $(SLOW_LOG) | head -n 20
 
 mariadb-restart:
-	ssh isucon11-qualify-1 "sudo systemctl status mariadb"
+	ssh isucon11-qualify-1 " \
+		sudo systemctl restart mariadb; \
+		wait"
 
 # nginx
 # scp-nginx:
@@ -90,13 +92,15 @@ nginx-rotate:
 
 # alp
 ALPSORT=sum
-ALPM="/api/isu/.+/icon,/api/isu/.+/graph,/api/isu/.+/condition,/api/isu/[-a-z0-9]+,/api/condition/[-a-z0-9]+,/api/catalog/.+,/api/condition\?,/isu/........-....-.+"
+ALPM="/api/isu/.+/icon,/api/isu/.+/graph,/api/isu/.+/condition,/api/isu/[-a-z0-9]+,/api/condition/[-a-z0-9]+,/api/catalog/.+,/api/condition\?,/isu/........-....-.+,/?jwt=.+"
 OUTFORMAT=count,method,uri,min,max,sum,avg,p99
 # .PHONY: alp
 # alp:
 # 	sudo alp ltsv --file=/var/log/nginx/access.log --nosave-pos --pos /tmp/alp.pos --sort $(ALPSORT) --reverse -o $(OUTFORMAT) -m $(ALPM) -q
 alp:
-	ssh isucon11-qualify-1 "sudo alp ltsv --file=/var/log/nginx/access.log --nosave-pos --pos /tmp/alp.pos --sort $(ALPSORT) --reverse -o $(OUTFORMAT) -m $(ALPM) -q"
+	ssh isucon11-qualify-1 " \
+		sudo alp ltsv --file=/var/log/nginx/access.log --nosave-pos --pos /tmp/alp.pos --sort $(ALPSORT) --reverse -o $(OUTFORMAT) -m $(ALPM) -q; \
+		wait"
 
 # .PHONY: alpsave
 # alpsave:
@@ -105,3 +109,9 @@ alp:
 # .PHONY: alpload
 # alpload:
 # 	sudo alp ltsv --load /tmp/alp.dump --sort $(ALPSORT) --reverse -o count,method,uri,min,max,sum,avg,p99 -q
+
+bench-run:
+	ssh isucon11-qualify-1 " \
+		cd /home/isucon/bench; \
+		./bench -all-addresses 127.0.0.11 -target 127.0.0.11:443 -tls -jia-service-url http://127.0.0.1:4999; \
+		wait"
