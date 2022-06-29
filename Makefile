@@ -39,7 +39,7 @@ build:
 
 pprof:
 	ssh isucon11-qualify-1 " \
-		/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go http://localhost:6060/debug/pprof/profile; \
+		/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go/isucondition http://localhost:6060/debug/pprof/profile; \
 		wait"
 
 # mysql
