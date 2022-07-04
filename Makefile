@@ -67,6 +67,9 @@ SLOW_LOG=/tmp/slow-query.log
 mariadb-deploy:
 	ssh isucon11-qualify-1 "sudo dd of=/etc/mysql/mariadb.conf.d/50-server.cnf" < ./etc/mysql/mariadb.conf.d/50-server.cnf
 
+mariadb-rotate:
+	ssh isucon11-qualify-1 "sudo rm -f /var/log/mysql/mariadb-slow.log"
+
 # mysqldumpslowを使ってslow query logを出力
 # オプションは合計時間ソート
 # このコマンドは2台目から叩かないと意味がない
