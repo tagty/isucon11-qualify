@@ -70,17 +70,11 @@ mariadb-deploy:
 mariadb-rotate:
 	ssh isucon11-qualify-1 "sudo rm -f /var/log/mysql/mariadb-slow.log"
 
-# mysqldumpslowを使ってslow query logを出力
-# オプションは合計時間ソート
-# このコマンドは2台目から叩かないと意味がない
-.PHONY: slow-show
-slow-show:
-	sudo mysqldumpslow -s t $(SLOW_LOG) | head -n 20
-
 mariadb-restart:
-	ssh isucon11-qualify-1 " \
-		sudo systemctl restart mariadb; \
-		wait"
+	ssh isucon11-qualify-1 "sudo systemctl restart mariadb"
+
+pt-query-digest:
+	ssh isucon11-qualify-1 "sudo pt-query-digest --limit 5 /var/log/mysql/mariadb-slow.log"
 
 # nginx
 # scp-nginx:
