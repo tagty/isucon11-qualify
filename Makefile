@@ -64,6 +64,9 @@ SLOW_LOG=/tmp/slow-query.log
 # slow-off:
 # 	$(MYSQL) -e "set global slow_query_log = OFF;"
 
+mariadb-deploy:
+	ssh isucon11-qualify-1 "sudo dd of=/etc/mysql/mariadb.conf.d/50-server.cnf" < ./etc/mysql/mariadb.conf.d/50-server.cnf
+
 # mysqldumpslowを使ってslow query logを出力
 # オプションは合計時間ソート
 # このコマンドは2台目から叩かないと意味がない
