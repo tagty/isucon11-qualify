@@ -25,11 +25,10 @@ nginx-reload:
 	ssh isucon11-qualify-1 "sudo systemctl reload nginx.service"
 
 nginx-rotate:
-	ssh isucon11-qualify-1 sudo sh -c 'test -f /var/log/nginx/access.log && mv -f /var/log/nginx/access.log /var/log/nginx/access.log.old || true'
-	ssh isucon11-qualify-1 'sudo kill -USR1 `cat /var/run/nginx.pid`'
+	ssh isucon11-qualify-1 "sudo rm -f /var/log/nginx/access.log"
 
-deploy-all:
-	deploy build mariadb-deploy mariadb-rotate mariadb-restart nginx-reload nginx-rotate
+nginx-restart:
+	ssh isucon11-qualify-1 "sudo systemctl restart nginx.service"
 
 bench-run:
 	ssh isucon11-qualify-1 " \
