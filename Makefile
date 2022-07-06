@@ -45,5 +45,8 @@ OUTFORMAT=count,method,uri,min,max,sum,avg,p99
 alp:
 	ssh isucon11-qualify-1 "sudo alp ltsv --file=/var/log/nginx/access.log --nosave-pos --pos /tmp/alp.pos --sort $(ALPSORT) --reverse -o $(OUTFORMAT) -m $(ALPM) -q"
 
+pprof-kill:
+	ssh isucon11-qualify-1 "pgrep -f 'pprof' | xargs kill;"
+
 pprof:
-	ssh isucon11-qualify-1 "/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go/isucondition http://localhost:6060/debug/pprof/profile"
+	ssh isucon11-qualify-1 "/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go/isucondition http://localhost:6060/debug/pprof/profile?seconds=65"
