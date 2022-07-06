@@ -88,7 +88,7 @@ type IsuCondition struct {
 	Timestamp  time.Time `db:"timestamp"`
 	IsSitting  bool      `db:"is_sitting"`
 	Condition  string    `db:"condition"`
-	Level      string    `db:level`
+	Level      string    `db:"level"`
 	Message    string    `db:"message"`
 	CreatedAt  time.Time `db:"created_at"`
 }
