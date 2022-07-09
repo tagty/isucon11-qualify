@@ -49,4 +49,4 @@ pprof-kill:
 	ssh isucon11-qualify-1 "pgrep -f 'pprof' | xargs kill;"
 
 pprof:
-	ssh isucon11-qualify-1 "/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go/isucondition http://localhost:6060/debug/pprof/profile?seconds=85"
+	ssh isucon11-qualify-1 "/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go/isucondition http://localhost:6060/debug/pprof/profile?seconds=75"
