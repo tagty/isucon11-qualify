@@ -1209,19 +1209,25 @@ func postIsuCondition(c echo.Context) error {
 			return c.String(http.StatusBadRequest, "bad request body")
 		}
 
+		cLevel, err := calculateConditionLevel(cond.Condition)
+		if err != nil {
+			return c.String(http.StatusBadRequest, "bad request body")
+		}
+
 		rows = append(rows, IsuCondition{
 			JIAIsuUUID: jiaIsuUUID,
 			Timestamp:  timestamp,
 			IsSitting:  cond.IsSitting,
 			Condition:  cond.Condition,
+			Level:      cLevel,
 			Message:    cond.Message,
 		})
 	}
 
 	_, err = tx.NamedExec(
 		"INSERT INTO `isu_condition`"+
-			"	(`jia_isu_uuid`, `timestamp`, `is_sitting`, `condition`, `message`)"+
-			"	VALUES (:jia_isu_uuid, :timestamp, :is_sitting, :condition, :message)",
+			"	(`jia_isu_uuid`, `timestamp`, `is_sitting`, `condition`, `message`, `level`)"+
+			"	VALUES (:jia_isu_uuid, :timestamp, :is_sitting, :condition, :message, :level)",
 		rows)
 	if err != nil {
 		c.Logger().Errorf("db error: %v", err)
