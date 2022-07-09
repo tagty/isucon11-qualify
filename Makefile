@@ -36,7 +36,7 @@ bench-run:
 		./bench -all-addresses 127.0.0.11 -target 127.0.0.11:443 -tls -jia-service-url http://127.0.0.1:4999"
 
 pt-query-digest:
-	ssh isucon11-qualify-1 "sudo pt-query-digest --limit 5 /var/log/mysql/mariadb-slow.log"
+	ssh isucon11-qualify-1 "sudo pt-query-digest --limit 10 /var/log/mysql/mariadb-slow.log"
 
 ALPSORT=sum
 ALPM="/api/isu/.+/icon,/api/isu/.+/graph,/api/isu/.+/condition,/api/isu/[-a-z0-9]+,/api/condition/[-a-z0-9]+,/api/catalog/.+,/api/condition\?,/isu/........-....-.+,/?jwt=.+"
@@ -49,4 +49,4 @@ pprof-kill:
 	ssh isucon11-qualify-1 "pgrep -f 'pprof' | xargs kill;"
 
 pprof:
-	ssh isucon11-qualify-1 "/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go/isucondition http://localhost:6060/debug/pprof/profile?seconds=90"
+	ssh isucon11-qualify-1 "/home/isucon/local/go/bin/go tool pprof -http=0.0.0.0:1080 webapp/go/isucondition http://localhost:6060/debug/pprof/profile?seconds=85"
