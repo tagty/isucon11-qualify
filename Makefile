@@ -13,13 +13,13 @@ build:
 		sudo systemctl restart isucondition.go"
 
 mariadb-deploy:
-	ssh isucon11-qualify-1 "sudo dd of=/etc/mysql/mariadb.conf.d/50-server.cnf" < ./etc/mysql/mariadb.conf.d/50-server.cnf
+	ssh isucon11-qualify-2 "sudo dd of=/etc/mysql/mariadb.conf.d/50-server.cnf" < ./etc/mysql/mariadb.conf.d/50-server.cnf
 
 mariadb-rotate:
-	ssh isucon11-qualify-1 "sudo rm -f /var/log/mysql/mariadb-slow.log"
+	ssh isucon11-qualify-2 "sudo rm -f /var/log/mysql/mariadb-slow.log"
 
 mariadb-restart:
-	ssh isucon11-qualify-1 "sudo systemctl restart mariadb"
+	ssh isucon11-qualify-2 "sudo systemctl restart mariadb"
 
 nginx-reload:
 	ssh isucon11-qualify-1 "sudo systemctl reload nginx.service"
@@ -36,7 +36,7 @@ bench-run:
 		./bench -all-addresses 127.0.0.11 -target 127.0.0.11:443 -tls -jia-service-url http://127.0.0.1:4999"
 
 pt-query-digest:
-	ssh isucon11-qualify-1 "sudo pt-query-digest --limit 10 /var/log/mysql/mariadb-slow.log"
+	ssh isucon11-qualify-2 "sudo pt-query-digest --limit 10 /var/log/mysql/mariadb-slow.log"
 
 ALPSORT=sum
 ALPM="/api/isu/.+/icon,/api/isu/.+/graph,/api/isu/.+/condition,/api/isu/[-a-z0-9]+,/api/condition/[-a-z0-9]+,/api/catalog/.+,/api/condition\?,/isu/........-....-.+,/?jwt=.+"
